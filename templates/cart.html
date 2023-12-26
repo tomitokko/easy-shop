@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Easy Shop
+{% endblock %}
+
+{% block heading %}Easy Shop(Computer Project){% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<!-- Session Container Begins -->
+    <br>
+    <div align="center">
+        <h1>Your Cart</h1>
+    </div>
+	<br>
+	<div id="cart_product" align="center">
+        <!-- A table is created to show the cart of a user -->
+        <table style="width: 60%; border-collapse: collapse; text-align: center;">
+            <thead style="background-color: #f2f2f2;">
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th style="padding: 8px;">Product Name</th>
+                    <th style="padding: 8px;">Quantity</th>
+                    <th style="padding: 8px;">Price</th>
+                    <th style="padding: 8px;">Action</th>
+                </tr>
+
+                <!-- This loops through the product_details passed from the views to display all the products in the user's cart -->
+                {% for product in products_details %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 8px;">{{ product.0 }}</td>
+                    <form action="update-cart-product" method="POST">
+                        {%csrf_token%}
+
+                        <td style="padding: 8px;">
+                            <input name="quantity" min="1" type="number" value="{{ product.3 }}" style="width: 50px; text-align: center;">
+                        </td>
+                        <td style="padding: 8px;">£{{ product.1 }}</td>
+                        <td style="padding: 8px;">
+                            
+                        
+                        <input type="hidden" name="product_id" value="{{ product.2 }}">
+                        <button style="background-color: #f44336; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    
+                    </form>
+
+                    <form action="remove-cart-product" method="POST">
+                        {%csrf_token%}
+                            
+                        <br>
+                        <input type="hidden" name="product_id" value="{{ product.2 }}">
+                        <button style="background-color: #f44336; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+                    
+                    </form>
+                        </td>
+                </tr>
+                {% endfor %}
+                
+            </thead>
+        
+        </table>
+        <br>
+        <!-- This shows the data gotten from the cart view -->
+        <h4>Items: {{ total_items_quantity }}</h4>
+        <h4>Total: £{{ total_price }}</h4>
+        <br>
+        <!-- This link takes the user to the checkout page -->
+        <a href="checkout"><button style="background-color: #f44336; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Checkout</button></a>
+                        
+    </div>
+
+	<br><br>
+	  
+
+
+
+
+
+
+	
+
+
+	
+</div>
+{% endblock %}

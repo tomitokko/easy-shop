@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Invoice</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.invoice {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.invoice h1 {
+			font-size: 28px;
+			color: #333;
+			margin-top: 0;
+		}
+
+		.invoice p {
+			font-size: 16px;
+			color: #777;
+			line-height: 1.5;
+			margin: 0;
+			padding: 0;
+		}
+
+		.invoice table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.invoice table th,
+		.invoice table td {
+			padding: 10px;
+			border: 1px solid #ddd;
+			text-align: left;
+		}
+
+		.invoice table th {
+			background-color: #f5f5f5;
+		}
+
+		.invoice table td.amount {
+			text-align: right;
+		}
+
+		.invoice table tfoot td {
+			background-color: #f5f5f5;
+			font-weight: bold;
+			padding: 10px;
+		}
+
+		.invoice table tfoot td.amount {
+			background-color: #fff;
+			text-align: right;
+			font-weight: normal;
+			font-size: 18px;
+		}
+	</style>
+</head>
+<body>
+    <br><br><br><br><br><br>
+	<div class="invoice">
+		<h1>Invoice</h1>
+		<b id=""></b>
+        <p>Date: <p id="current_date">Date: </p></p>
+        <br>
+        <script>
+        document.getElementById("current_date").innerHTML = new Date().toLocaleDateString(); ;
+        </script>
+		<p>Bill To:</p>
+		<p>{{request.user.first_name | title}} {{request.user.last_name | title}}<br>
+		{{user_address.2 | title}}<br>
+		{{user_address.3 | title}}, {{user_address.5 | title}} {{user_address.4 | title}}</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Quantity</th>
+					<th>Price</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+                {% for data in invoice_data %}
+				<tr>
+					<td>{{data.2}}</td>
+					<td>{{data.1}}</td>
+					<td>£{{data.3}}</td>
+					<td class="amount">£{{data.4}}</td>
+				</tr>
+                {% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3">Total</td>
+					<td class="amount">£{{total_amount}}</td>
+			</tr>
+		</tfoot>
+	</table>
+	<p>Thank you for your business!</p>
+</div>
+<br><br><br>
+
+<div align="center">
+	<style>
+		.button {
+		  position: relative;
+		  background-color: #4CAF50;
+		  border: none;
+		  border-radius: 10px;
+		  font-size: 28px;
+		  color: #FFFFFF;
+		  padding: 20px;
+		  width: 300px;
+		  text-align: center;
+		  transition-duration: 0.4s;
+		  text-decoration: none;
+		  overflow: hidden;
+		  cursor: pointer;
+		}
+		
+		.button:after {
+		  content: "";
+		  background: #f1f1f1;
+		  display: block;
+		  position: absolute;
+		  padding-top: 300%;
+		  padding-left: 350%;
+		  margin-left: -20px !important;
+		  margin-top: -120%;
+		  opacity: 0;
+		  transition: all 0.8s
+		}
+		
+		.button:active:after {
+		  padding: 0;
+		  margin: 0;
+		  opacity: 1;
+		  transition: 0s
+		}
+	</style>
+	<br>
+	<button onclick="window.print()" class="button">Download/Print</button>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</html>

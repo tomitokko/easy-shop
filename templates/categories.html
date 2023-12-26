@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Easy Shop
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+<style>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+
+
+<div class="dropdown">
+	<span style="color: black;">Categories</span>
+	<div class="dropdown-content">
+	{% for category in category_list %}
+	<p><a href="/categories/{{category}}">{{category|title}}</a></p>
+	{% endfor %}
+	</div>
+  </div>
+
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="/store-dashboard">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<!-- Session Container Begins -->
+	<br>
+	<div align="center">
+		<form action="search" method="POST">
+			{% csrf_token %}
+			<input name="search_term" type="text" placeholder="Search for products..." style="padding:10px; font-size:20px; border-radius:5px;">
+			<button type="submit" style="padding:10px 20px; font-size:20px; border-radius:5px;">Search</button>
+		</form>
+	</div>
+        <div align="center">
+            <br>
+            <h1>{{category | title}}</h1>
+        </div>
+	<!-- Product Slider Begins -->
+	<br><br>
+	<div class="product-slider">
+		{% for product in products %}
+		<div class="slide">
+		  <img width="260" height="260" src="/media/{{product.5}}" alt="Product 1" height="200" draggable="false">
+		  <h3>{{product.1|title}} &middot; £{{product.8}}</h3>
+		  <!-- <p>128GB</p> -->
+		  <button><a href="/product/{{product.0}}">View</a></button>
+		</div>
+		{% endfor %}
+	</div>
+	  
+<center><h2 class="suggested">Suggested Product - Based On Viewed Products</h2></center>
+	<!-- Product Slider Ends --><img src="{% static 'arrows.gif' %}" height="50">
+<div class="product-slider">
+	
+	<div class="flex">
+	
+	{% for product in most_viewed_recommendations %}
+	<div class="product-session">
+		<img src="/media/{{product.5}}" alt="Product Name" draggable="false">
+		<h3>{{product.1}}</h3>
+		<p class="price">
+			£{{product.8}}</p>
+		<button class="add-to-cart"><a href="/product/{{product.0}}">View</a></button>
+	</div>
+	{% endfor %}
+&nbsp;
+	 
+	  </div>
+
+</div>
+
+
+
+<center><h2 class="suggested">Suggested Product - Based On Searched Products</h2></center>
+	<!-- Product Slider Ends --><img src="{% static 'arrows.gif' %}" height="50">
+<div class="product-slider">
+	
+	<div class="flex">
+	
+	{% for product in most_recent_searches_recommendations %}
+	<div class="product-session">
+		<img src="/media/{{product.5}}" alt="Product Name" draggable="false">
+		<h3>{{product.1}}</h3>
+		<p class="price">
+			£{{product.8}}</p>
+		<button class="add-to-cart"><a href="/product/{{product.0}}">View</a></button>
+	</div>
+	{% endfor %}
+&nbsp;
+	 
+	  </div>
+
+</div>
+
+	
+
+
+	<div class="container">
+		<h2 class="title"><center>Advertised Product, Especially for you</center></h2>
+		<div class="photo-gallery">
+		   <div class="column">
+			 <div class="photo">
+				<img src="{% static 'img/331306_bce6504b-f621-4cd1-b73a-6456fc3ff480.avif' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/None_1845cc7f-8ce5-4e51-b268-3fbe82b9f8a4.avif' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/290057_aeb6f021-ed9e-45a8-b247-c336792a9dd6.avif' %}" alt="">
+			 </div>
+		   </div>
+		   <div class="column">
+			 <div class="photo">
+				<img src="{% static 'img/266743_dcae80b8-f769-438a-95fd-cd92b59984bd.avif' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/None_b5118e49-2d80-4894-96a4-617b4cbac43a.avif' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/584021_0fbf118d-032a-459c-8441-6cb075ce8468.avif' %}" alt="">
+			 </div>
+		   </div>
+		   <div class="column">
+			<div class="photo">
+			   <img src="{% static 'img/None_252d0b5e-1bde-4f4c-8426-1dfd6a8a089e.avif' %}" alt="">
+			</div>
+			<div class="photo">
+			   <img src="{% static 'img/None_74b32542-34e3-44c7-a83a-3279055089bf.avif' %}" alt="">
+			</div>
+			<div class="photo">
+			   <img src="{% static 'img/512583_4d813e9a-b1b4-4d25-b40f-4b770111d865.avif' %}" alt="">
+			</div>
+		  </div>
+		   <div class="column">
+			 <div class="photo">
+				<img src="{% static 'img/None_6d8e4b09-0352-4c13-803e-112cfdd6b0a7.webp' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/None_f46f910f-110d-4f1c-825d-9009c4ebc7b2.avif' %}" alt="">
+			 </div>
+			 <div class="photo">
+				<img src="{% static 'img/499706_6b32911a-2480-48a7-8fcb-eb45cfd87fc3.avif' %}" alt="">
+			 </div>
+		   </div>
+		</div>
+	  </div>
+</div>
+{% endblock %}

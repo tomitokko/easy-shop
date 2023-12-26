@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Easy Shop
+{% endblock %}
+
+{% block extra_head %}
+<style>
+
+input[type=text],input[type=password],input[type=email],textarea{
+  width: 100%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 5px;
+  padding: 14px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+
+.form-div {
+  border-radius: 5px;
+  background-color: none;
+  padding: 20px;
+}
+
+input[type=submit] {
+  padding: 13px 17px;
+  background-color: #73A5C6;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  text-align: center;
+}
+
+
+</style>
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+<style>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+
+
+<div class="dropdown">
+	<span style="color: black;">Categories</span>
+	<div class="dropdown-content">
+	{% for category in category_list %}
+	<p><a href="/categories/{{category}}">{{category|title}}</a></p>
+	{% endfor %}
+	</div>
+  </div>
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="/store/{{users_store_id}}">My Store</a></li>
+<li><a href="/store-dashboard">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+
+    <br>
+
+    <div style="margin-left: 300px; margin-right: 300px;">
+        <h3 style="color:red">{{ error }}</h3>
+    
+        <div class="form-div">
+          <form action="/update_profile_details" method="POST">
+            {% csrf_token %}
+            <h2 align="center">Edit Account Details</h2>
+            <label>First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{request.user.first_name}}">
+            
+            <label>Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{request.user.last_name}}">
+            
+            <br><br>
+            <div align="center"><input type="submit" value="Update">
+          </form>
+
+          <br><br><br>
+
+          <form action="/create_or_update_address" method="POST">
+            {% csrf_token %}
+            {{initial_data}}
+            <h2 align="center">Edit Address</h2>
+            <label>Street</label>
+            <input type="text" id="street" name="street" value="{{initial_address.street_address}}">
+
+            <label>City</label>
+            <input type="text" id="city" name="city" value="{{initial_address.city}}">
+
+            <label>Post Code</label>
+            <input type="text" id="post_code" name="post_code" value="{{initial_address.post_code}}">
+
+            <label>Country</label>
+            <input type="text" id="country" name="country" value="{{initial_address.country}}">
+
+            <br><br><br>
+            <div align="center"><input type="submit" value="Update">
+          </form>
+        </div>
+    </div>
+    
+    <br><br><br><br>
+</div>
+{% endblock %}

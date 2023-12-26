@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Store Dashboard - Easy Shop
+{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block heading %}
+Store Dashboard - Easy Shop
+{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<div align="center">
+  <h1>{{ store_details.1 | title }} Dashboard</h1>
+  <h2><a href="/store-dashboard/orders">View All Orders</a></h2>
+</div>
+
+<div style="margin-left: 300px; margin-right: 300px;">
+    <!-- <h3>Create New Product</h3> -->
+    <div class="form-div">
+      <div class="canvas-wrapper">
+        <canvas id="ordersChart"></canvas>
+      </div>
+      <br><br><br>
+
+  <h1>Total Money Made: £{{total_sales}}</h1>
+  <h1>Total Orders Received: {{orders_count}}</h1>
+
+      <br><br><br>
+      <div class="canvas-wrapper">
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <br>
+      <b>The pie chart above recommends that you sell similar products to the product below, as it has been bought {{product_order_details_data.0}} times which is more than any other product on your store:</b>
+    </div>
+
+</div>
+
+<div class="product-slider" align="center" style="margin-left: 550px;">
+  <div class="slide">
+    <img width="260" height="260" src="/media/{{most_bought_product.5}}" alt="Product 1" height="200" draggable="false">
+    <h3>{{most_bought_product.1|title}} &middot; £{{most_bought_product.8}}</h3>
+    <!-- <p>128GB</p> -->
+    <button><a href="/product/{{most_bought_product.0}}">View</a></button>
+  </div>
+</div>
+<br><br><br><br>
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<!-- The javascripts below are used to draw the store's analytics on a chart -->
+<script>
+  var ctx = document.getElementById('ordersChart').getContext('2d');
+  var data = {{ order_dictionary|safe }};
+  var labels = [];
+  var values = [];
+  for (var key in data) {
+    labels.push(key);
+    values.push(data[key]);
+  }
+
+  var ordersChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'Daily Orders',
+              data: values,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+</script>
+
+<script>
+  // Get the canvas element
+  var ctx = document.getElementById('myChart').getContext('2d');
+  
+  // Create a new Chart object
+  var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: {{ product_order_details_label|safe }},
+      datasets: [{
+        label: 'Most Bought Products',
+        data: {{ product_order_details_data|safe }},
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Most Bought Products'
+      }
+    }
+  });
+  
+</script>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block head_title %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <!-- accessing w3schools stylesheet for some styling -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    {% block extra_head %}
+    {% endblock %}
+
+</head>
+
+<nav id="navbar">
+	<ul>
+    {% if user.is_authenticated %}
+	<li><a href="#">Welcome, {{ user.username }} {{hi}}</a></li>
+
+    {% endif %}
+	</ul>
+	<h2>{% block heading %}{% endblock %}</h2>
+	<ul>
+		<li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="M29.5164 17.5001C35.0393 27.0659 34.4759 37.7307 28.2581 41.3206C22.0403 44.9104 12.5226 40.0659 6.99976 30.5001C1.47691 20.9342 2.04029 10.2694 8.25809 6.67962C14.4759 3.08977 23.9936 7.93428 29.5164 17.5001Z"/><path d="M18.2581 17.5001C12.7353 27.0659 13.2986 37.7307 19.5164 41.3206C25.7342 44.9104 35.2519 40.0659 40.7748 30.5001C46.2976 20.9342 45.7342 10.2694 39.5164 6.67962C33.2986 3.08977 23.7809 7.93428 18.2581 17.5001Z"/><path d="M23.7529 10.3442C25.8979 12.2519 27.8821 14.6692 29.5165 17.5C35.0394 27.0658 34.476 37.7306 28.2582 41.3205C26.96 42.07 25.518 42.4518 23.9986 42.4998"/></g></svg></a></li>
+    <li>
+      <a href="/cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M7.3 21q-.95 0-1.625-.688Q5 19.625 5 18.675V9.4L3.175 5H1V3h3.525l1.65 4H20.95q.575 0 .875.475q.3.475.025.975L19 14.025q1.275.2 2.138 1.175q.862.975.862 2.3q0 1.45-1.012 2.475Q19.975 21 18.525 21q-1.475 0-2.487-1.025q-1.013-1.025-1.013-2.475q0-.5.125-.925q.125-.425.35-.825l-3.275-.3l-3 4.5q-.325.5-.838.775Q7.875 21 7.3 21Zm.025-2.025q.05 0 .225-.125l2.425-3.6q-1.225-.125-1.925-.588Q7.35 14.2 7 13.7v5q0 .125.1.2q.1.075.225.075ZM18.5 19q.65 0 1.075-.438Q20 18.125 20 17.5q0-.65-.425-1.075Q19.15 16 18.5 16q-.625 0-1.062.425Q17 16.85 17 17.5q0 .625.438 1.062q.437.438 1.062.438Z"/>
+        </svg>
+      </a>
+      <sup id="cart-item-count" style="color: green;"></sup>
+    </li>
+    <li><a href="/account"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M16 9a4 4 0 1 1-8 0a4 4 0 0 1 8 0Zm-2 0a2 2 0 1 1-4 0a2 2 0 0 1 4 0Z"/><path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11s11-4.925 11-11S18.075 1 12 1ZM3 12c0 2.09.713 4.014 1.908 5.542A8.986 8.986 0 0 1 12.065 14a8.984 8.984 0 0 1 7.092 3.458A9 9 0 1 0 3 12Zm9 9a8.963 8.963 0 0 1-5.672-2.012A6.992 6.992 0 0 1 12.065 16a6.991 6.991 0 0 1 5.689 2.92A8.964 8.964 0 0 1 12 21Z"/></g></svg></a></li>
+	</ul>
+  </nav>
+
+  <nav id="navbar">
+	<ul>
+    
+	  <li><a href="/">Home</a></li>
+
+      {% if user.is_authenticated %}
+      {% block createstore %}{% endblock %}
+	  <li><a href="/logout">Logout</a></li>
+	  <li><a href="/wishlist">Wishlist</a></li>
+	  <li><a href="/orders">My Orders</a></li>
+      {% else %}
+	  <li><a href="/login">Login</a></li>
+	  <li><a href="/register">Register</a></li>
+      {% endif %}
+	</ul>
+  </nav>
+
+<body>
+
+    {% block content %}
+
+    {% endblock %}
+
+</body>
+
+
+<footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h4>About Us</h4>
+          <p>
+            Welcome to EasyShop, the best online platform for finding and purchasing products from a variety of sellers. Shop with us for a convenient and unique shopping experience.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h4>Contact</h4>
+          <ul class="list-unstyled">
+            <li>London</li>
+            <li>London</li>
+            <li>London</li>
+          </ul>
+          <div></div>
+        </div>
+        <div class="col-md-4">
+          <h4>Follow Us</h4>
+          <ul class="list-inline social-buttons">
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+    
+
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "/get-cart-count",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        $("#cart-item-count").text(data.cart_item_count);
+      }
+    });
+  });
+</script>
+{% block extra_script %}
+{% endblock %}
+
+</html>

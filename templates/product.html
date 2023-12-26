@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+{{product_details.1}}
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.mySlides {display:none;}
+</style>
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="/create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="/add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+
+	<div align="center" >
+		<h2><u>{{product_details.1|title}}</u></h2>
+	</div>
+
+	{% if wishlist_error is not None %}
+	<div align="center" >
+		<h2 style="color: red;">{{wishlist_error}}</h2>
+	</div>
+	{% endif %}
+
+	{% for message in messages %}
+	<div align="center" >
+		<h2 style="color: red;">{{message}}</h2>
+	</div>
+	{% endfor %}
+
+	<style>
+		.img-text {
+		   display: flex;
+		   align-items: center;
+		}
+		img {
+		   margin-right: 10px;
+		}
+	 </style>
+	 
+	<div class="">
+		<div class="img-text w3-content w3-display-container">
+		  <img class="mySlides" width="500" height="500" src="/media/{{product_details.5}}" height="200" draggable="false">
+		  <img class="mySlides" width="500" height="500" src="/media/{{product_details.6}}" height="200" draggable="false">
+		  <img class="mySlides" width="500" height="500" src="/media/{{product_details.7}}" height="200" draggable="false">
+			
+		  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+		
+		  <h3>
+			<b>Product Name:</b> {{product_details.1|title}} 
+			<br><br> 
+			<b>Price:</b> £{{product_details.8}} 
+			<br><br>
+			<b>Description:</b> {{product_details.2}} 
+			<br><br>
+			<form action="/add_to_cart" method="POST">
+				{% csrf_token %}
+				<b>Quantity</b>
+				<input type="hidden" name="product_id" value="{{product_details.0}}">
+				<input type="hidden" name="store_id" value="{{product_store_id.0}}">
+				<input type="number" name="quantity" value="1" min="1" style="width: 50px; text-align: center;">
+				<br><br>
+				<button type="submit">Add To Cart</button>
+
+				{% if wishlist_check == False %}
+				<button><a href="/add-to-wishlist/{{product_details.0}}">Add To Wishlist</a></button>
+				{% else %}
+				<br><br>
+				<button><a href="/remove-from-wishlist/{{product_details.0}}">Remove From Wishlist</a></button>
+				{% endif %}
+
+				
+			</form>
+
+				{% if owned_by_logged_in_user == True %}
+				<a href="/edit-product/{{product_details.0}}">Edit Product</a>
+				<form method="POST" action="/delete-product">
+					{% csrf_token %}
+					<a id="delete" href="#">Delete Product</a>
+					<div id="input_div" style="display: none;">
+						<input type="hidden" name="product_id" value="{{product_details.0}}" />
+						<br>
+						<label>Enter Store Passcode:</label>
+						<input type="text" name="store_passcode" />
+						<button type="submit">Delete</button>
+					</div>
+				</form>
+				{% endif %}
+				
+			<br>
+			<b>Store:</b> <a href="/store/{{product_store_id.0}}">{{store_name|title}}</a>
+		  </h3>
+		  <br><br>
+		</div>
+	</div>
+
+	<center><h2 class="suggested">Similar Products</h2></center>
+
+	<div class="product-slider">
+		{% for product in similar_products %}
+		<div class="slide">
+		  <img width="260" height="260" src="/media/{{product.5}}" alt="Product 1" height="200" draggable="false">
+		  <h3>{{product.1|title}} &middot; £{{product.8}}</h3>
+		  <!-- <p>128GB</p> -->
+		  <button><a href="/product/{{product.0}}">View</a></button>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script>
+	var slideIndex = 1;
+	showDivs(slideIndex);
+	
+	function plusDivs(n) {
+	  showDivs(slideIndex += n);
+	}
+	
+	function showDivs(n) {
+	  var i;
+	  var x = document.getElementsByClassName("mySlides");
+	  if (n > x.length) {slideIndex = 1}
+	  if (n < 1) {slideIndex = x.length}
+	  for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none";  
+	  }
+	  x[slideIndex-1].style.display = "block";  
+	}
+	</script>
+
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(document).ready(function() {
+	  $('#delete').click(function(e) {
+		e.preventDefault(); // Prevent the default link behavior
+		$('#input_div').show(); // Show the div with id "input_div"
+	  });
+	});
+	</script>
+{% endblock %}

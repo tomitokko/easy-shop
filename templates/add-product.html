@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Add Product - Easy Shop
+{% endblock %}
+
+{% block extra_head %}
+<style>
+
+input[type=text],input[type=password],input[type=email],input[type=number], input[type=file],textarea,select{
+  width: 100%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 5px;
+  padding: 14px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+
+.form-div {
+  border-radius: 5px;
+  background-color: none;
+  padding: 20px;
+}
+
+input[type=submit] {
+  padding: 13px 17px;
+  background-color: #73A5C6;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  text-align: center;
+}
+
+
+</style>
+{% endblock %}
+
+{% block heading %}
+Add Product - Easy Shop(Computer Project)
+{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<br><br><br><br><br>
+
+<div style="margin-left: 300px; margin-right: 300px;">
+    <h3>Create New Product</h3>
+    <h3 style="color:red">{{ error }}</h3>
+
+    <div class="form-div">
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Product Name</label>
+        <input type="text" id="product_name" name="product_name" placeholder="Product Name..." required>
+        
+        <label>Product Description</label>
+        <textarea type="text" id="product_description" name="product_description" placeholder="Product Description..." rows="4" cols="5" required></textarea>
+
+        <label>First Image</label>
+        <input type="file" accept="image/png, image/jpeg" id="first_image" name="first_image" placeholder="First Image..." required>
+        
+        <label>Second Image</label>
+        <input type="file" accept="image/png, image/jpeg" id="second_image" name="second_image" placeholder="Second Image..." required>
+        
+        <label>Third Image</label>
+        <input type="file" accept="image/png, image/jpeg" id="third_image" name="third_image" placeholder="Third Image..." required>
+        
+        <label>Product Price</label>
+        <input type="number" id="price" name="price" placeholder="Product Price..." required>
+        
+        <label for="category">Product Category</label>
+        <select name="product_category" id="product_category" required>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="kitchen utensils">Kitchen Utensils</option>
+            <option value="Automotive Parts & Accessories">Automotive Parts & Accessories</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Home & Kitchen">Home & Kitchen</option>
+            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+            <option value="Cleaning supplies">Cleaning supplies</option>
+            <option value="Gifts">Gifts</option>
+            <option value="jewelry">Jewelry</option>
+        </select>
+        
+        
+        <div align="center"><input type="submit" value="Create"></div>
+
+      </form>
+    </div>
+</div>
+
+<br><br><br><br>
+
+
+{% endblock %}
+
+{% block extra_script %}
+{% endblock %}

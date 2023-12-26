@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+{{store_details.1}}
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="/create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="/add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<br>
+	<div align="center">
+		<form action="search" method="POST">
+			{% csrf_token %}
+			<input name="search_term" type="text" placeholder="Search for products..." style="padding:10px; font-size:20px; border-radius:5px;">
+			<button type="submit" style="padding:10px 20px; font-size:20px; border-radius:5px;">Search</button>
+		</form>
+	</div>
+
+	<br>
+
+	<div align="center" >
+		<h1>{{store_details.1|title}}</h1>
+	</div>
+
+	<div align="center" >
+		<h3><u>Search Results</u></h3>
+	</div>
+
+	<div class="product-slider">
+		{% if products %}
+		{% for product in products %}
+		<div class="slide">
+		  <img width="260" height="260" src="/media/{{product.5}}" alt="Product 1" height="200" draggable="false">
+		  <h3>{{product.1|title}} &middot; £{{product.8}}</h3>
+		  <!-- <p>128GB</p> -->
+		  <button><a href="/product/{{product.0}}">View</a></button>
+		</div>
+		{% endfor %}
+		{% else %}
+		<br><br>
+		<div align="center">
+		<h3>Sorry, no products found for your serch query...</h3>
+		</div>
+		<br><br>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

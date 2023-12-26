@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Store Dashboard - Easy Shop
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+  }
+  
+  th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+      background-color: #f2f2f2;
+  }
+  
+  .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block heading %}
+Store Dashboard - Easy Shop
+{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+
+<div align="center">
+  <h1>{{ store_details.1 | title }} Dashboard</h1>
+</div>
+
+<div class="title" style="padding-left: 50px;">Orders by Store: {{ store_name }}</div>
+<div align="center" style="padding-left: 50px; padding-right: 50px; padding-bottom: 50px;">
+    
+    {% if orders_list %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date Ordered</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Customer Information</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders_list reversed %}
+                    <tr>
+                        <td>{{ order.0 }}</td>
+                        <td>{{ order.1 }}</td>
+                        <td><a href="/product/{{order.8}}">{{ order.4 }}</a></td>
+                        <td>{{ order.2 }}</td>
+                        <td>{{ order.5 }}</td>
+                        <td>
+                            <textarea rows="8" cols="15" readonly>
+                                First Name: {{order.9}},
+                                Last Name: {{order.10}},
+                                ADDRESS: {{order.11}}, {{order.12}}, {{order.13}}, {{order.14}}
+                              </textarea>
+                        </td> 
+                        <td>
+                            <!-- HTML form with a dropdown list of options -->
+                            <form id="order-form" action="/store-dashboard/orders/{{order.0}}/">
+                                <select name="status" id="status" required>
+                                    <option value="P" {% if order.7 == 'P' %}selected{% endif %}>Processing</option>
+                                    <option value="S" {% if order.7 == 'S' %}selected{% endif %}>Shipped</option>
+                                    <option value="D" {% if order.7 == 'D' %}selected{% endif %}>Delivered</option>
+                                </select>
+                                <br>
+                                <br>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No orders found for this store.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+{{store_details.1}}
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="/create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="/add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<div align="center" >
+		<h1>{{store_details.1|title}}</h1>
+		<h3>Description: {{store_details.5|title}}</h3>
+	</div>
+
+	<div align="center" >
+		<h3><u>Products</u></h3>
+	</div>
+	{% if products %}
+		<div class="product-slider">
+			{% for product in products %}
+			<div class="slide">
+			<img width="260" height="260" src="/media/{{product.5}}" alt="Product 1" height="200" draggable="false">
+			<h3>{{product.1|title}} &middot; £{{product.8}}</h3>
+			<!-- <p>128GB</p> -->
+			<button><a href="/product/{{product.0}}">View</a></button>
+			</div>
+			{% endfor %}
+		</div>
+	{% else %}
+	<br><br>
+	<h2 align="center">This store has no products...</h2>
+	{% endif %}
+	
+	<br><br><br><br>
+	<hr>
+	<div align="center" >
+		<h2>Store's Contact: <a href="mailto:{{owners_email}}">{{owners_email}}</a> </h2>
+	</div>
+	<hr>
+</div>
+{% endblock %}

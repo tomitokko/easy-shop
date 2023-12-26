@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+Easy Shop
+{% endblock %}
+
+{% block heading %}Easy Shop{% endblock %}
+
+{% block createstore %}
+
+{% if has_store is False %}
+<li><a href="create-store">Create A Store</a></li>
+{% else %}
+<li><a href="#">Store Dashboard</a></li>
+<li><a href="add-product">Add Product</a></li>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<!-- Session Container Begins -->
+    <br>
+    <div align="center">
+        <h1>Checkout</h1>
+    </div>
+	<br>
+    <div align="center">
+        <div id="paypal-button-container"></div>
+    </div>
+    <br>
+
+    <div align="center">
+        <h4>Items: {{ total_items_quantity }}</h4>
+        <h4>Total: £{{ total_price }}</h4>
+    </div>
+    <br>
+
+
+
+
+	<div id="cart_product" align="center">
+        <table style="width: 60%; border-collapse: collapse; text-align: center;">
+            <thead style="background-color: #f2f2f2;">
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th style="padding: 8px;">Product Name</th>
+                    <th style="padding: 8px;">Quantity</th>
+                    <th style="padding: 8px;">Price</th>
+                </tr>
+
+                {% for product in products_details %}
+
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 8px;">{{ product.0 }}</td>
+                    
+                        <td style="padding: 8px;">
+                            {{ product.3 }}    
+                        </td>
+                        <td style="padding: 8px;">£{{ product.1 }}</td>
+                       
+                     </td>
+                </tr>
+                {% endfor %}
+                
+            </thead>
+        
+        </table>
+        <br>
+                        
+    </div>
+
+    <div align="center">
+        <p>Shipping Address:</p>
+		<p>{{request.user.first_name | title}} {{request.user.last_name | title}}<br>
+		{{user_address.2 | title}}<br>
+		{{user_address.3 | title}}, {{user_address.5 | title}} {{user_address.4 | title}}</p>
+		
+    </div>
+	  
+
+    
+
+
+    <form id="payment-complete" action="payment-complete" method="POST">
+        {%csrf_token%}
+        <input type="hidden" name="total_price" value="{{total_price}}" />
+        <input type="hidden" name="products_details" value="{{products_details}}" />
+        
+
+    </form>
+
+	
+
+
+	
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=<your-id>&currency=<your-currency>"></script>
+
+<script>
+
+    
+
+    var total = '{{total_price}}'
+    var productsDetails = '{{products_details}}'
+
+
+
+    function completeOrder() {
+        document.getElementById("payment-complete").submit();
+    }
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+        // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: parseFloat(total).toFixed(2)
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                
+                completeOrder()
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                var transaction = orderData.purchase_units[0].payments.captures[0];
+                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+
+            });
+        }
+
+
+    }).render('#paypal-button-container');
+</script>
+{% endblock %}
